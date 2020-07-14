@@ -7,6 +7,15 @@
         <div class="d-flex justify-content-between align-items-center mt-3 mb-3">
             <h1>Modifica Post</h1>
       </div>
+      @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+      @endif
       <form action="{{route('admin.posts.update', ['post' => $post->id])}}" method="post">
           @csrf
           @method('PUT')
@@ -17,6 +26,18 @@
           <div class="form-group">
             <label for="testo">Testo post</label>
             <textarea type="text" name="content" class="form-control" id="testo" placeholder="Iserisci testo post...">{{ old('content', $post->content) }}"</textarea>
+          </div>
+          <div class="form-group">
+            <label for="categoria">Categoria</label>
+            <select class="form-control" id="categoria"name="category_id">
+              <option value="">Seleziona categoria</option>
+              @foreach ($categories as $category)
+                <option value="{{$category->id}}"
+                  {{($post->category->id ?? '') == $category->id ? 'selected' : ''}}>
+                  {{$category->name}}
+                </option>
+              @endforeach
+            </select>
           </div>
           <button type="submit" class="btn btn-primary">Salva</button>
        </form>
