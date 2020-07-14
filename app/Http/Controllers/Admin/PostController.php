@@ -29,9 +29,19 @@ class PostController extends Controller
           'title' => 'required|max:255|unique:posts,title',
           'content' => 'required'
         ]);
+
         $dati_post = $request->all();
         $slug = Str::of($dati_post['title'])->slug('-');
+        $slug_iniziale = $slug;
+        $slug_trovato = Post::where('slug', $slug)->first();
+        $contatore = 0;
+        while($slug_trovato) {
+          $contatore++;
+          $slug = $slug_iniziale . '-' . $contatore;
+          $slug_trovato = Post::where('slug', $slug)->first();
+        }
         $dati_post['slug'] = $slug;
+
         $nuovo_post = new Post();
         $nuovo_post->fill($dati_post);
         $nuovo_post->save();
@@ -67,9 +77,18 @@ class PostController extends Controller
         'title' => 'required|max:255|unique:posts,title,' .$id,
         'content' => 'required'
       ]);
+
       $dati_post = $request->all();
       $slug = Str::of($dati_post['title'])->slug('-');
+      $slug_trovato = Post::where('slug', $slug)->first();
+      $contatore = 0;
+      while($slug_trovato) {
+        $contatore++;
+        $slug = $slug_iniziale . '-' . $contatore;
+        $slug_trovato = Post::where('slug', $slug)->first();
+      }
       $dati_post['slug'] = $slug;
+
       $post = Post::find($id);
       $post->update($dati_post);
       return redirect()->route('admin.posts.index');
