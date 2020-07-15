@@ -7,13 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Post;
 use App\Category;
+use App\Tag;
 
 class PostController extends Controller
 {
 
     public function index()
     {
-      $posts = Post::with('category')->get();
+      $posts = Post::with('category', 'tags')->get();
       return view('admin.posts.index', compact('posts'));
     }
 
@@ -21,7 +22,12 @@ class PostController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('admin.posts.create', compact('categories'));
+        $tags = Tag::all();
+        $data = [
+          'categories' => $categories,
+          'tags' => $tags
+        ];
+        return view('admin.posts.create', $data);
     }
 
 
@@ -47,6 +53,9 @@ class PostController extends Controller
         $nuovo_post = new Post();
         $nuovo_post->fill($dati_post);
         $nuovo_post->save();
+        if(!empty($dati_post['tags'])) {
+          $nuovo_post->tags()->sync($dati_post['tags']);
+        }
         return redirect()->route('admin.posts.index');
     }
 
@@ -65,11 +74,13 @@ class PostController extends Controller
     public function edit($id)
     {
       $post = Post::find($id);
+      $tags = Tag::all();
       if ($post) {
         $categories = Category::all();
         $data = [
           'post' => $post,
-          'categories' => $categories
+          'categories' => $categories,
+          'tags' => $tags
         ];
         return view('admin.posts.edit', $data);
       } else {
@@ -99,6 +110,12 @@ class PostController extends Controller
 
       $post = Post::find($id);
       $post->update($dati_post);
+      if(!empty($dati_post['tags'])) {
+        $post->tags()->sync($dati_post['tags']);
+      } else {
+        $post->tags()->detach();
+      }
+
       return redirect()->route('admin.posts.index');
 
     }

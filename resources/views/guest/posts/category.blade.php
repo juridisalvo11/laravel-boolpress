@@ -4,7 +4,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h1>Posts : </h1>
+            <h1>Posts nella categoria : {{ $category->name }}</h1>
             <ul>
               @foreach ($posts as $post)
                 <li>

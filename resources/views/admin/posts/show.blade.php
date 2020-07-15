@@ -25,6 +25,16 @@
           {{$post->category->name ?? '-'}}</p>
         </div>
         <div class="">
+          <strong>Tags : </strong>
+          <p>
+            @forelse ($post->tags as $tag)
+              {{$tag->name}}{{$loop->last ? '' : ','}}
+            @empty
+              -
+            @endforelse
+          </p>
+        </div>
+        <div class="">
           <strong>Data creazione : </strong>
           <p>{{$post->created_at}}</p>
         </div>

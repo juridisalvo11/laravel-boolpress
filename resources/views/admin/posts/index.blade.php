@@ -15,6 +15,7 @@
               <th>Titolo</th>
               <th>Slug</th>
               <th>Categorie</th>
+              <th>Tags</th>
               <th>Azioni</th>
             </tr>
           </thead>
@@ -25,6 +26,13 @@
                 <td>{{$post->title}}</td>
                 <td>{{$post->slug}}</td>
                 <td>{{$post->category->name ?? '-'}}</td>
+                <td>
+                  @forelse ($post->tags as $tag)
+                    {{$tag->name}}{{$loop->last ? '' : ','}}
+                  @empty
+                    -
+                  @endforelse
+                </td>
                 <td>
                   <a class="btn btn-info btn-small" href="{{route('admin.posts.show', ['post' => $post->id])}}">Dettagli</a>
                   <a class="btn btn-warning btn-small" href="{{route('admin.posts.edit', ['post' => $post->id])}}">Modifica</a>
