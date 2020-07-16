@@ -16,7 +16,7 @@
             </ul>
         </div>
       @endif
-      <form action="{{route('admin.posts.update', ['post' => $post->id])}}" method="post">
+      <form action="{{route('admin.posts.update', ['post' => $post->id])}}" method="post" enctype="multipart/form-data">
           @csrf
           @method('PUT')
           <div class="form-group">
@@ -39,6 +39,15 @@
                 </option>
               @endforeach
             </select>
+          </div>
+          <div class="form-group">
+            <label for="cover_image">Immagine di copertina</label>
+            <input type="file" name="image" class="form-control-file">
+            @if ($post->cover_image)
+                <img src="{{ asset('storage/' . $post->cover_image)}}" alt="">
+            @else
+              <p>Copertina assente</p>
+            @endif
           </div>
           <div class="form-group">
             Tag :

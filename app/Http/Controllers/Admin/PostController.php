@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use App\Post;
 use App\Category;
 use App\Tag;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -35,7 +36,8 @@ class PostController extends Controller
     {
         $request->validate([
           'title' => 'required|max:255|unique:posts,title',
-          'content' => 'required'
+          'content' => 'required',
+          'image' => 'image|max:1024 '
         ]);
 
         $dati_post = $request->all();
@@ -49,6 +51,11 @@ class PostController extends Controller
           $slug_trovato = Post::where('slug', $slug)->first();
         }
         $dati_post['slug'] = $slug;
+
+        if($dati_post['image']) {
+            $img_path = Storage::put('uploads', $dati_post['image']);
+            $dati_post['cover_image'] = $img_path;
+        }
 
         $nuovo_post = new Post();
         $nuovo_post->fill($dati_post);
@@ -93,7 +100,8 @@ class PostController extends Controller
     {
       $request->validate([
         'title' => 'required|max:255|unique:posts,title,' .$id,
-        'content' => 'required'
+        'content' => 'required',
+        'image' => 'image|max:1024'
       ]);
 
       $dati_post = $request->all();
@@ -107,6 +115,11 @@ class PostController extends Controller
         $slug_trovato = Post::where('slug', $slug)->first();
       }
       $dati_post['slug'] = $slug;
+
+      if($dati_post['image']) {
+          $img_path = Storage::put('uploads', $dati_post['image']);
+          $dati_post['cover_image'] = $img_path;
+      }
 
       $post = Post::find($id);
       $post->update($dati_post);

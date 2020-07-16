@@ -11,6 +11,11 @@
           <strong>Titolo : </strong>
           <p>{{$post->title}}</p>
         </div>
+        @if ($post->cover_image)
+          <div class="">
+            <img src="{{ asset('storage/' . $post->cover_image)}}" alt="">
+          </div>
+        @endif
         <div class="">
           <strong>Contenuto : </strong>
           <p>{{$post->content}}</p>

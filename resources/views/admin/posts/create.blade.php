@@ -16,7 +16,7 @@
               </ul>
           </div>
       @endif
-      <form action="{{route('admin.posts.store')}}" method="post">
+      <form action="{{route('admin.posts.store')}}" method="post" enctype="multipart/form-data">
           @csrf
           <div class="form-group">
             <label for="titolo">Titolo</label>
@@ -36,6 +36,10 @@
                 value="{{$category->id}}">{{$category->name}}</option>
               @endforeach
             </select>
+          </div>
+          <div class="form-group">
+            <label for="cover_image">Immagine di copertina</label>
+            <input type="file" name="image" class="form-control-file">
           </div>
             <div class="form-group">
               Tag :
