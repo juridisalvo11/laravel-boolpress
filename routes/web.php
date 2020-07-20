@@ -13,14 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Auth::routes();
+Auth::routes(['register' => false]);
 
 Route::get('/', 'HomeController@index')->name('home');
 Route::get('/posts', 'PostController@index')->name('posts.index');
 Route::get('/posts/{slug}', 'PostController@show')->name('posts.show');
 Route::get('/categories/{slug}', 'PostController@category')->name('categories.show');
 
-
+Route::get('/contacts', 'HomeController@contacts')->name('contact.show');
+Route::post('/contacts', 'HomeController@contactsStore')->name('contact.store');
 
 Route::prefix('admin')->namespace('Admin')->name('admin.')->middleware('auth')->group(function(){
   Route::get('/', 'HomeController@index')->name('home');
